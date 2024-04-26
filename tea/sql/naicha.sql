@@ -179,3 +179,18 @@ CREATE TABLE `product_operate_log` (
   `operate_ip` varchar(64) NOT NULL DEFAULT '' COMMENT '操作IP',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=42933 DEFAULT CHARSET=utf8 COMMENT='商品服务相关操作日志';
+
+
+DROP TABLE IF EXISTS `order_comment`;
+CREATE TABLE `order_comment` (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `order_no` varchar(30) NOT NULL COMMENT '订单号',
+  `service_num` int(11) DEFAULT '0' COMMENT '服务',
+  `order_num` int(11) DEFAULT '0' COMMENT '点单',
+  `speed_num` int(11) DEFAULT '0' COMMENT '速度',
+  `product_num` int(11) DEFAULT '0' COMMENT '产品',
+  `enviroment_num` int(11) DEFAULT '0' COMMENT '环境',
+  `remark` varchar(1000) NULL COMMENT '建议',
+  PRIMARY KEY (`id`),
+  KEY `order_no` (`order_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单评价';

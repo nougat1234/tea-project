@@ -7,6 +7,7 @@ import com.app.moudles.service.OrderServiceImpl;
 import com.common.common.annotation.NeedLogin;
 import com.common.common.exception.ServiceException;
 import com.common.common.util.result.Result;
+import com.common.entity.app.OrderComment;
 import com.common.entity.app.OrderInfo;
 import com.common.entity.app.form.CreateOrderForm;
 import com.common.entity.app.vo.HistoryOrderVO;
@@ -76,4 +77,11 @@ public class OrderController {
         return Result.ok(orderService.getHandlingOrders(SessionUtil.getCurrentWxOpenidFromRequest(request)));
     }
 
+    @ApiModelProperty("订单建议添加")
+    @NeedLogin
+    @PostMapping("/createOrderComment")
+    public Result createOrderComment(@RequestBody OrderComment orderParams, HttpServletRequest request) throws ServiceException {
+        orderService.createOrderComment(orderParams);
+        return  Result.ok();
+    }
 }

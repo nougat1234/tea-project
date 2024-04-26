@@ -1,6 +1,7 @@
 package com.app.moudles.service;
 
 import com.alibaba.fastjson.JSON;
+import com.app.moudles.mapper.OrderCommentMapper;
 import com.app.moudles.mapper.OrderMapper;
 import com.app.moudles.mapper.OrderProductMapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -13,6 +14,7 @@ import com.common.common.util.GeneratorUtil;
 import com.common.common.util.PayjsUtil;
 import com.common.common.util.http.HttpUtil;
 import com.common.common.util.result.Result;
+import com.common.entity.app.OrderComment;
 import com.common.entity.app.OrderInfo;
 import com.common.entity.app.OrderProducts;
 import com.common.entity.app.form.CreateOrderForm;
@@ -37,6 +39,9 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class OrderServiceImpl {
+
+    @Resource
+    private OrderCommentMapper orderCommentMapper;
     @Resource
     private OrderMapper orderMapper;
     @Resource
@@ -185,5 +190,11 @@ public class OrderServiceImpl {
                 .eq("wx_openid", wxOpenid)
                 .notIn("order_status", params)
                 .orderByDesc("create_time"));
+    }
+
+
+    public void createOrderComment(OrderComment orderParams) {
+        //建议插入
+        orderCommentMapper.insert(orderParams);
     }
 }

@@ -27,7 +27,12 @@
 							</view>
 						</view>
 						<view class="d-flex align-items-center justify-content-end">
-							<view style="margin-right: 10rpx;"><button type="primary" plain size="mini" @tap="detail(historyOrder.orderNo)">查看详情</button></view>
+							<view style="margin-right: 10rpx;">
+								<button type="primary" plain size="mini" @tap="detail(historyOrder.orderNo)">查看详情</button>
+							</view>
+							<view v-if="historyOrder.orderStatus == '已完成'">
+								<button type="primary" plain size="mini" @tap.stop="review(historyOrder)">去评价</button>
+							</view>
 						</view>
 					</view>
 				</list-cell>
@@ -97,7 +102,12 @@ export default {
 			if (this.pageNo >= this.totalPage) return;
 			this.pageNo++;
 			this.getHistoryOrders();
-		}
+		},
+		review(historyOrder) {
+			uni.navigateTo({
+				url: '/pages/orders/review?orderNo=' + historyOrder.orderNo 
+			})
+		},
 	}
 };
 </script>

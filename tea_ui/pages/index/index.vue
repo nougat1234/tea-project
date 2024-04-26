@@ -49,6 +49,27 @@
 			</view>
 			<view class="member-news">
 				<view class="header">
+					<view class="title">热销奶茶排行</view>
+					<view class="iconfont iconRightbutton"></view>
+				</view>				 
+				<view class="list" style="background-color: white;">
+					 <!-- 商品列表 begin -->
+					<view class="item good" v-for="(goods, key) in goods[0].goodsList.slice(0,5)" :key="key" style="margin-bottom: 10px;margin-righr: 15px;">
+						<image :src="goodsImageBaseUrl + goods.image" class="image" style="width: 40%;"></image>
+						<view class="right">
+							<text class="name">{{ goods.name }}</text>
+							<text class="tips">{{ goods.description && goods.description != '' ? goods.description : goods.name }}</text>
+							<view class="price_and_action">
+								<text class="price">￥{{ goods.defaultPrice / 100 }}</text>
+							</view>
+						</view>
+					</view>
+					<!-- 商品 end -->
+				</view>
+				 
+			</view>
+			<view class="member-news">
+				<view class="header">
 					<view class="title">会员新鲜事</view>
 					<view class="iconfont iconRightbutton"></view>
 				</view>
@@ -75,18 +96,40 @@
 </template>
 
 <script>
-	import {mapState, mapGetters} from 'vuex'
-	
+	import modal from '@/components/modal/modal';
+	import popupLayer from '@/components/popup-layer/popup-layer';
+	import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
+	import staticGoods from '../../api/goods.js';
+	import staticStores from '../../api/store.js';
 	export default {
+		components: {
+			modal,
+			popupLayer
+		},
 		data() {
 			return {
+				
+				goods: staticGoods, // 引入静态数据
+				// 商品图片的基础路径
+				goodsImageBaseUrl: this.$config.baseUrl + '/static/image/'
 			}
 		},
 		computed: {
 			...mapState(['member']),
 			...mapGetters(['isLogin'])
 		},
+		onLoad() {
+			this.init();
+		},
 		methods: {
+			//页面初始化
+			async init() {
+				let that = this;
+				that.$request('/goods/goodsMenu/list', 'get').then(result => {
+					console.log('获取数据' + JSON.stringify(result.data));
+					that.goods = result.data;
+				});
+			},
 			takein() {
 				this.$store.commit('SET_ORDER_TYPE', 'takein')
 				uni.switchTab({
@@ -398,6 +441,48 @@ page {
 				color: #ffffff;
 			}
 		}
+	}
+	
+	.good {
+		display: flex;
+		align-items: center;
+		margin-bottom: 15px;
+	}
+	.goodImage {
+		background-image: none;
+		background-position: 0% 0%;
+		background-size: 100% 100%;
+		background-repeat: no-repeat;
+	}
+	.good .right{
+		width: 50%;
+		flex: 1;
+		height: 80px;
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: space-between;
+		padding-right: 7px;
+	}
+	.name {
+		font-size: 14px;
+		margin-bottom: 5px;
+	}
+	.tips{
+		width: 100%;
+		height: 20px;
+		line-height: 20px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		font-size: 12px;
+		color: #919293;
+		margin-bottom: 5px;
+	}
+	.price{
+		font-size: 14px;
+		font-weight: 600;
 	}
 }
 </style>
